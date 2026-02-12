@@ -4,32 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Will You Be My Valentine? 💝</title>
-
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    text-align: center;
-    overflow: hidden;
 }
-
 .container {
+    position: relative;
     background: white;
     padding: 40px;
-    border-radius: 20px;
+    border-radius: 25px;
     box-shadow: 0 15px 30px rgba(0,0,0,0.2);
     max-width: 400px;
+    text-align: center;
+    z-index: 10;
 }
-
 h1 {
     color: #ff4757;
 }
-
 button {
     padding: 12px 22px;
     margin: 10px;
@@ -41,73 +39,77 @@ button {
     cursor: pointer;
     transition: 0.3s;
 }
-
 button:hover {
     background: #ff8787;
     transform: scale(1.1);
+}
+.floating {
+    position: absolute;
+    font-size: 24px;
+    animation: floatAnim linear infinite;
+    user-select: none;
+}
+@keyframes floatAnim {
+    0% { transform: translateY(100vh) translateX(0) rotate(0deg);}
+    100% { transform: translateY(-50px) translateX(50px) rotate(360deg);}
 }
 </style>
 </head>
 <body>
 
 <div class="container" id="app">
-    <h1 id="question">Jade, do you like me? 💕</h1>
+    <h1 id="question">Krokro 2, do you like me? 💕</h1>
     <div id="buttons">
         <button onclick="yesFirst()">Yes</button>
-        <button onclick="noFirst()">No</button>
+        <button onclick="noFirst(this)">No</button>
     </div>
+    <button id="musicBtn" style="margin-top:15px;">🎵 Play Music</button>
+    <audio id="music" loop>
+        <source src="YOUR_CLOUDINARY_URL_HERE" type="audio/mpeg">
+    </audio>
 </div>
 
 <script>
-const config = {
-    valentineName: "Krokro 2",
-    questions: {
-        first: {
-            text: "Do you like me?",
-            secretAnswer: "I don't like you, I love you! ❤️"
-        },
-        second: {
-            text: "How much do you love me?"
-        },
-        third: {
-            text: "Will you be my Valentine...? 💝"
-        }
-    },
-    loveMessages: {
-        extreme: "WOOOOW You love me that much?? 🥰🚀💝",
-        high: "To infinity and beyond! 🚀💝",
-        normal: "And beyond! 🥰"
-    },
-    celebration: {
-        title: "Yay! I'm the luckiest person... 🎉",
-        message: "Now come get your gift... 🎁💖🤗💝💋❤️💕"
-    }
-};
-
+const valentineName = "Krokro 2";
 let love = 100;
+const hearts = ['❤️', '💖', '💝', '💗', '💓'];
+const bears = ['🧸', '🐻'];
+
+function createFloating() {
+    const emoji = Math.random() < 0.8 ? hearts[Math.floor(Math.random()*hearts.length)] : bears[Math.floor(Math.random()*bears.length)];
+    const span = document.createElement('span');
+    span.classList.add('floating');
+    span.innerText = emoji;
+    span.style.left = Math.random()*90 + 'vw';
+    span.style.animationDuration = (10 + Math.random()*10) + 's';
+    span.style.fontSize = (20 + Math.random()*30) + 'px';
+    document.body.appendChild(span);
+    setTimeout(()=> span.remove(), 15000);
+}
+setInterval(createFloating, 300);
 
 function yesFirst() {
-    document.getElementById("question").innerText = config.questions.first.secretAnswer;
+    document.getElementById("question").innerText = "I don't like you, I love you! ❤️";
     setTimeout(secondQuestion, 1500);
 }
-
-function noFirst() {
-    document.getElementById("question").innerText = "Nice try 😏";
+function noFirst(btn) {
+    btn.style.position = "absolute";
+    btn.style.top = Math.random()*70 + "vh";
+    btn.style.left = Math.random()*70 + "vw";
 }
 
 function secondQuestion() {
-    document.getElementById("question").innerText = config.questions.second.text;
+    document.getElementById("question").innerText = "How much do you love me?";
     document.getElementById("buttons").innerHTML =
         `<button onclick="increaseLove()">This much! (${love}%)</button>`;
 }
 
 function increaseLove() {
     love += Math.floor(Math.random() * 500) + 100;
-
     let message = "";
-    if (love > 5000) message = config.loveMessages.extreme;
-    else if (love > 1000) message = config.loveMessages.high;
-    else if (love > 100) message = config.loveMessages.normal;
+    if (love > 5000) message = "WOOOOW You love me that much?? 🥰🚀💝";
+    else if (love > 1000) message = "To infinity and beyond! 🚀💝";
+    else if (love > 100) message = "And beyond! 🥰";
 
     document.getElementById("buttons").innerHTML =
         `<button onclick="increaseLove()">This much! (${love}%)</button>
@@ -116,25 +118,36 @@ function increaseLove() {
 }
 
 function finalQuestion() {
-    document.getElementById("question").innerText =
-        config.valentineName + ", " + config.questions.third.text;
-
+    document.getElementById("question").innerText = `${valentineName}, will you be my Valentine...? 💝`;
     document.getElementById("buttons").innerHTML =
         `<button onclick="celebrate()">Yes!</button>
-         <button onclick="moveButton(this)">No</button>`;
-}
-
-function moveButton(btn) {
-    btn.style.position = "absolute";
-    btn.style.top = Math.random() * 80 + "%";
-    btn.style.left = Math.random() * 80 + "%";
+         <button onclick="noFirst(this)">No</button>`;
 }
 
 function celebrate() {
     document.getElementById("app").innerHTML =
-        `<h1>${config.celebration.title}</h1>
-         <p>${config.celebration.message}</p>`;
+        `<h1>Yay! I'm the luckiest person... 🎉</h1>
+         <p>Now come get your gift... 🎁💖🤗💝💋❤️💕</p>`;
+    // Explosion of hearts
+    for(let i=0;i<50;i++){
+        const span = document.createElement('span');
+        span.innerText = hearts[Math.floor(Math.random()*hearts.length)];
+        span.style.position = "absolute";
+        span.style.fontSize = (20 + Math.random()*30)+"px";
+        span.style.left = Math.random()*90+"vw";
+        span.style.top = Math.random()*90+"vh";
+        document.body.appendChild(span);
+        setTimeout(()=> span.remove(),3000);
+    }
 }
+
+// Music control
+const music = document.getElementById('music');
+const musicBtn = document.getElementById('musicBtn');
+musicBtn.onclick = () => {
+    if(music.paused){ music.play(); musicBtn.innerText = "🔇 Stop Music"; }
+    else{ music.pause(); musicBtn.innerText = "🎵 Play Music"; }
+};
 </script>
 
 </body>
