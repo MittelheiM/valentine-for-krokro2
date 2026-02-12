@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine? 💝</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+}
+
+.container {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    max-width: 400px;
+}
+
+h1 {
+    color: #ff4757;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 30px;
+    background: #ff6b6b;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #ff8787;
+    transform: scale(1.1);
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+    <h1 id="question">Do you like me?</h1>
+    <div id="buttons">
+        <button onclick="yesFirst()">Yes</button>
+        <button onclick="noFirst()">No</button>
+    </div>
+</div>
+
+<script>
+let love = 100;
+
+function yesFirst() {
+    document.getElementById("question").innerText = "I don't like you, I love you! ❤️";
+    setTimeout(secondQuestion, 1500);
+}
+
+function noFirst() {
+    document.getElementById("question").innerText = "Try again 😏";
+}
+
+function secondQuestion() {
+    document.getElementById("question").innerText = "How much do you love me?";
+    document.getElementById("buttons").innerHTML =
+        `<button onclick="increaseLove()">This much! (${love}%)</button>`;
+}
+
+function increaseLove() {
+    love += Math.floor(Math.random() * 500) + 100;
+    document.getElementById("buttons").innerHTML =
+        `<button onclick="increaseLove()">This much! (${love}%)</button>
+         <button onclick="finalQuestion()">Next ❤️</button>`;
+}
+
+function finalQuestion() {
+    document.getElementById("question").innerText = "Will you be my Valentine...? 💝";
+    document.getElementById("buttons").innerHTML =
+        `<button onclick="celebrate()">Yes!</button>
+         <button onclick="moveButton(this)">No</button>`;
+}
+
+function moveButton(btn) {
+    btn.style.position = "absolute";
+    btn.style.top = Math.random() * 80 + "%";
+    btn.style.left = Math.random() * 80 + "%";
+}
+
+function celebrate() {
+    document.getElementById("app").innerHTML =
+        `<h1>Yay! I'm the luckiest person... 🎉</h1>
+         <p>Now come get your gift... 🎁💖🤗💝💋❤️💕</p>`;
+}
+</script>
+
+</body>
+</html>
