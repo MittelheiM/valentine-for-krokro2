@@ -61,7 +61,7 @@ button:hover {
     <h1 id="question">Krokro 2, do you like me? 💕</h1>
     <div id="buttons">
         <button onclick="yesFirst()">Yes</button>
-        <button onclick="noFirst(this)">No</button>
+        <button id="noBtn">No</button>
     </div>
     <button id="musicBtn" style="margin-top:15px;">🎵 Play Music</button>
     <audio id="music" loop>
@@ -75,6 +75,7 @@ let love = 100;
 const hearts = ['❤️', '💖', '💝', '💗', '💓'];
 const bears = ['🧸', '🐻'];
 
+// Floating emojis
 function createFloating() {
     const emoji = Math.random() < 0.8 ? hearts[Math.floor(Math.random()*hearts.length)] : bears[Math.floor(Math.random()*bears.length)];
     const span = document.createElement('span');
@@ -88,22 +89,20 @@ function createFloating() {
 }
 setInterval(createFloating, 300);
 
+// First question
 function yesFirst() {
     document.getElementById("question").innerText = "I don't like you, I love you! ❤️";
     setTimeout(secondQuestion, 1500);
 }
-function noFirst(btn) {
-    btn.style.position = "absolute";
-    btn.style.top = Math.random()*70 + "vh";
-    btn.style.left = Math.random()*70 + "vw";
-}
 
+// Second question
 function secondQuestion() {
     document.getElementById("question").innerText = "How much do you love me?";
     document.getElementById("buttons").innerHTML =
         `<button onclick="increaseLove()">This much! (${love}%)</button>`;
 }
 
+// Increase love
 function increaseLove() {
     love += Math.floor(Math.random() * 500) + 100;
     let message = "";
@@ -117,16 +116,19 @@ function increaseLove() {
          <button onclick="finalQuestion()">Next ❤️</button>`;
 }
 
+// Final question
 function finalQuestion() {
     document.getElementById("question").innerText = `${valentineName}, will you be my Valentine...? 💝`;
     document.getElementById("buttons").innerHTML =
         `<button onclick="celebrate()">Yes!</button>
-         <button onclick="noFirst(this)">No</button>`;
+         <button id="noBtn" disabled style="opacity:0.5; cursor:not-allowed;">No</button>`; // No impossible to click
 }
 
+// Celebrate
 function celebrate() {
     document.getElementById("app").innerHTML =
-        `<h1>Yay! I'm the luckiest person... 🎁💖🤗💝💋❤️💕🎉</h1>
+        `<h1>Yay! I'm the luckiest person... 🎉</h1>
+         <p>Now come get your gift... 🎁💖🤗💝💋❤️💕</p>`;
     // Explosion of hearts
     for(let i=0;i<50;i++){
         const span = document.createElement('span');
